@@ -442,6 +442,52 @@
                  .dark .search-input:focus {
              background: rgba(31, 41, 55, 1);
          }
+         
+         /* Missing CSS Classes Fix */
+         .tab-button {
+             padding: 8px 16px;
+             cursor: pointer;
+             background: transparent;
+             border: 0;
+             border-bottom: 3px solid transparent;
+             transition: all 0.2s ease-in-out;
+             font-weight: 600;
+             color: #6b7280;
+             margin-bottom: -2px;
+         }
+         
+         .dark .tab-button {
+             color: #9ca3af;
+         }
+         
+         .tab-button.active {
+             color: #3b82f6;
+             border-bottom-color: #3b82f6;
+         }
+         
+         .dark .tab-button.active {
+             color: #60a5fa;
+             border-bottom-color: #60a5fa;
+         }
+         
+         .tab-panel {
+             display: none;
+             padding: 16px 4px 4px 4px;
+         }
+         
+         .tab-panel.active {
+             display: block;
+             animation: fadeIn 0.4s ease;
+         }
+         
+         @keyframes fadeIn {
+             from { opacity: 0; transform: translateY(10px); }
+             to { opacity: 1; transform: translateY(0); }
+         }
+         
+         body.modal-open {
+             overflow: hidden;
+         }
 
          /* Enhanced Grid Layout */
          .product-grid {
