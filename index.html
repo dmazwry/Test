@@ -8,172 +8,438 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <style>
         :root {
             --header-height: 140px;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #1f2937; }
-        .dark body { background-color: #0d1117; color: #f9fafb; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1f2937; 
+        }
+        .dark body { 
+            background: linear-gradient(135deg, #0c1222 0%, #1a1d29 100%);
+            color: #f9fafb; 
+        }
 
+        /* Enhanced Animations */
         @keyframes card-enter {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(30px) scale(0.95) rotateX(10deg); }
+            to { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
         }
-        @keyframes toast-in-out {
-            0% { transform: translateY(100%); opacity: 0; }
-            15% { transform: translateY(0); opacity: 1; }
-            85% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(100%); opacity: 0; }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-        @keyframes hero-glow {
-            0% { box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 35px 0px rgba(59, 130, 246, 0.5); }
-            100% { box-shadow: 0 0 20px -5px rgba(59, 130, 246, 0.3); }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
         }
-        .animation-hero-glow { animation: hero-glow 4s ease-in-out infinite; }
-        .toast-notification { animation: toast-in-out 3.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px -5px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 40px 0px rgba(102, 126, 234, 0.6); }
+        }
 
+        @keyframes toast-slide-in {
+            0% { transform: translateY(100%) scale(0.8); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes badge-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .floating-animation { animation: floating 3s ease-in-out infinite; }
+        .shimmer { animation: shimmer 2s infinite; }
+        .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .toast-slide { animation: toast-slide-in 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+        .badge-bounce { animation: badge-bounce 0.3s ease; }
+
+        /* Enhanced Product Cards */
         .product-card {
             opacity: 0;
             animation: card-enter 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .product-card {
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+            z-index: 1;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .dark .product-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 30px -10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Enhanced Badges */
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: -35px;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 6px 35px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            z-index: 2;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-badge.best-seller {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .product-badge.deal {
+            background: var(--warning-gradient);
+            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4);
+        }
+
+        /* Enhanced Buttons */
+        .btn-primary {
+            background: var(--primary-gradient);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
         }
-        .product-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit; border: 2px solid transparent;
-            background: linear-gradient(120deg, #818cf8, #3b82f6, #60a5fa) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out; mask-composite: exclude;
-            z-index: 1; opacity: 0; transition: opacity 0.4s ease;
-        }
-        .product-card:hover::before { opacity: 1; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgb(0 0 0 / 0.1); }
-        .dark .product-card:hover { box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 0 15px -5px rgba(59, 130, 246, 0.3); }
-        .product-badge {
-            position: absolute; top: 12px; right: -30px; background-color: #f59e0b;
-            color: white; padding: 4px 30px; font-size: 10px; font-weight: 700;
-            text-transform: uppercase; transform: rotate(45deg); box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 2;
-        }
-        .product-badge.best-seller { background-color: #ef4444; }
-        .product-badge.deal { background-color: #10b981; }
-
-        .modal {
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s;
-        }
-        .modal.active { opacity: 1; visibility: visible; transition-delay: 0s; }
-        .modal .modal-content {
-            transform: translateY(30px) scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .modal.active .modal-content { transform: translateY(0) scale(1); }
-        body.modal-open { overflow: hidden; }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 8px; border: 2px solid transparent; background-clip: content-box;}
-        .dark ::-webkit-scrollbar-thumb { background: #374151; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
         
-        .category-tabs::-webkit-scrollbar { height: 0; }
-
-        details > summary { list-style: none; }
-        details > summary::-webkit-details-marker { display: none; }
-        details .faq-arrow { transition: transform 0.3s ease; }
-        details[open] .faq-arrow { transform: rotate(180deg); }
-
-        .skeleton {
-            background-color: #e5e7eb; border-radius: 1rem;
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        .dark .skeleton { background-color: #1f2937; }
-        @keyframes pulse { 50% { opacity: 0.6; } }
-
-        .fly-to-cart {
+        .btn-primary::before {
+            content: '';
             position: absolute;
-            border-radius: 50%;
-            transition: transform 0.8s cubic-bezier(0.55, 0.09, 0.68, 0.53), opacity 0.8s linear;
-            z-index: 999;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
         
-        .hero-slider .swiper-slide {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        .btn-primary:hover::before {
+            left: 100%;
         }
-        .hero-slider .swiper-pagination-bullet { width: 8px; height: 8px; background-color: rgba(255, 255, 255, 0.5); opacity: 1; transition: all 0.3s; }
-        .hero-slider .swiper-pagination-bullet-active { background-color: white; transform: scale(1.2); }
-        .hero-slider .swiper-button-prev, .hero-slider .swiper-button-next {
-            color: white; width: 30px; height: 30px; background-color: rgba(0,0,0,0.2); border-radius: 50%; transition: background-color 0.3s;
-        }
-        .hero-slider .swiper-button-prev:hover, .hero-slider .swiper-button-next:hover { background-color: rgba(0,0,0,0.4); }
-        .hero-slider .swiper-button-prev::after, .hero-slider .swiper-button-next::after { font-size: 14px; font-weight: 900; }
         
-        .tab-button {
-            padding: 8px 16px; cursor: pointer; background: transparent; border: 0; border-bottom: 3px solid transparent;
-            transition: all 0.2s ease-in-out; font-weight: 600; color: #6b7280; margin-bottom: -2px;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
-        .dark .tab-button { color: #9ca3af; }
-        .tab-button.active { color: #3b82f6; border-bottom-color: #3b82f6; }
-        .dark .tab-button.active { color: #60a5fa; border-bottom-color: #60a5fa; }
-        .tab-panel { display: none; padding: 16px 4px 4px 4px; }
-        .tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Enhanced Modals */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal .modal-content {
+            transform: translateY(30px) scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .modal .modal-content {
+            background: rgba(31, 41, 55, 0.95);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Enhanced Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 1rem;
+        }
+        
+        .dark .skeleton {
+            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background-size: 200% 100%;
+        }
+
+        /* Enhanced Header */
         header {
             transition: all 0.3s ease-in-out;
-            padding-top: 1rem; padding-bottom: 1rem;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
+        
+        .dark header {
+            background: rgba(12, 18, 34, 0.8);
+            border-bottom: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
         header.scrolled {
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            padding-top: 0.5rem; padding-bottom: 0.5rem;
-        }
-        .dark header.scrolled {
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
-        }
-        header.scrolled #header-top {
-            margin-bottom: 0.5rem;
-        }
-         header.scrolled #header-logo {
-            transform: scale(0.9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
         }
 
+        /* Enhanced Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+            background-clip: content-box;
+        }
+
+        /* Enhanced Category Tabs */
+        .category-tab-btn {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-tab-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Enhanced Hero Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.1" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        /* Enhanced Testimonials */
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .testimonial-card {
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Toast Notifications */
+        .toast-notification {
+            background: var(--success-gradient);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Improved Focus States */
+        .focus\:ring-primary:focus {
+            ring-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Enhanced FAQ Accordion */
+        details[open] {
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        details[open] summary {
+            color: white;
+        }
+        
+        details .faq-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        details[open] .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Enhanced Empty States */
+        .empty-state {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .empty-state {
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+
+        /* New Glass Effect Class */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-effect {
+            background: rgba(31, 41, 55, 0.1);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+
+        /* Enhanced Product Images */
+        .product-image {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .product-card:hover .product-image::after {
+            transform: translateX(100%);
+        }
+
+        /* Enhanced Search Input */
+        .search-input {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .dark .search-input {
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
+        .search-input:focus {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .dark .search-input:focus {
+            background: rgba(31, 41, 55, 1);
+        }
     </style>
 </head>
-<body class="max-w-screen-sm mx-auto bg-gray-50 dark:bg-[#0d1117] text-gray-800 dark:text-gray-200 transition-colors duration-300">
+<body class="max-w-screen-sm mx-auto text-gray-800 dark:text-gray-200 transition-colors duration-500">
 
-    <div id="toast-container" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] w-11/12 max-w-sm"></div>
+    <!-- Enhanced Toast Container -->
+    <div id="toast-container" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-[60] w-11/12 max-w-sm space-y-2"></div>
 
     <div class="relative min-h-screen pb-28">
-        <header id="main-header" class="bg-gray-50/80 dark:bg-[#0d1117]/80 backdrop-blur-lg px-4 sticky top-0 z-20 border-b border-gray-200/80 dark:border-gray-800/80">
-            <div id="header-top" class="flex items-center justify-between mb-4 transition-all duration-300">
-                 <div id="header-logo" class="flex items-center gap-3 transition-transform duration-300 origin-left">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center rounded-lg font-black text-white text-xl shadow-lg shadow-blue-500/30">D</div>
-                    <h1 class="font-bold text-xl text-gray-900 dark:text-white">Dmaz Alyxers</h1>
+        <!-- Enhanced Header -->
+        <header id="main-header" class="px-4 sticky top-0 z-20 transition-all duration-300">
+            <div id="header-top" class="flex items-center justify-between py-4 transition-all duration-300">
+                <div id="header-logo" class="flex items-center gap-3 transition-transform duration-300 origin-left">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center rounded-xl font-black text-white text-xl shadow-lg pulse-glow relative overflow-hidden">
+                        <span class="relative z-10">D</span>
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-xl text-gray-900 dark:text-white">Dmaz Alyxers</h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Premium Digital Store</p>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button id="theme-toggle" aria-label="Toggle Dark Mode" class="w-10 h-10 flex items-center justify-center text-xl text-gray-500 dark:text-gray-400 hover:bg-gray-200/80 dark:hover:bg-gray-800/80 rounded-full transition-colors">
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" aria-label="Toggle Dark Mode" class="w-12 h-12 flex items-center justify-center text-xl text-gray-500 dark:text-gray-400 hover:bg-white/20 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 glass-effect">
                         <i class="fas fa-sun" id="theme-icon-light"></i>
                         <i class="fas fa-moon" id="theme-icon-dark" style="display:none;"></i>
                     </button>
-                    <button id="openCartBtn" aria-label="Buka Keranjang" class="relative w-10 h-10 flex items-center justify-center text-xl text-gray-500 dark:text-gray-400 hover:bg-gray-200/80 dark:hover:bg-gray-800/80 rounded-full transition-colors">
+                    <button id="openCartBtn" aria-label="Buka Keranjang" class="relative w-12 h-12 flex items-center justify-center text-xl text-gray-500 dark:text-gray-400 hover:bg-white/20 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 glass-effect">
                         <i class="fas fa-shopping-cart"></i>
-                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-blue-500 text-white rounded-full text-[10px] w-5 h-5 flex items-center justify-center border-2 border-gray-50 dark:border-[#0d1117] transition-transform transform scale-0 font-bold">0</span>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full text-[10px] w-6 h-6 flex items-center justify-center border-2 border-white dark:border-gray-900 transition-transform transform scale-0 font-bold shadow-lg">0</span>
                     </button>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            
+            <!-- Enhanced Search Section -->
+            <div class="flex items-center gap-3 pb-4">
                 <div class="relative flex-grow">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-4"><i class="fas fa-search text-gray-400"></i></span>
-                    <input type="text" id="searchInput" list="product-suggestions" placeholder="Cari Netflix, Spotify, Diamond ML..." class="w-full bg-gray-200/60 dark:bg-gray-800/60 rounded-full py-2.5 pl-11 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border-2 border-transparent transition placeholder:text-gray-500 dark:placeholder:text-gray-400">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </span>
+                    <input type="text" id="searchInput" list="product-suggestions" placeholder="Cari Netflix, Spotify, Diamond ML..." class="search-input w-full rounded-2xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:ring-primary transition-all duration-300 placeholder:text-gray-500 dark:placeholder:text-gray-400">
                     <datalist id="product-suggestions"></datalist>
                 </div>
                 <div class="relative">
-                     <select id="sortControl" aria-label="Urutkan Produk" class="appearance-none bg-gray-200/60 dark:bg-gray-800/60 rounded-full py-2.5 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 border-2 border-transparent transition text-gray-600 dark:text-gray-300">
+                    <select id="sortControl" aria-label="Urutkan Produk" class="search-input appearance-none rounded-2xl py-3 pl-4 pr-10 text-sm focus:outline-none focus:ring-primary transition-all duration-300 text-gray-600 dark:text-gray-300">
                         <option value="default">Urutkan</option>
                         <option value="best-seller">Best Seller</option>
                         <option value="newest">Terbaru</option>
@@ -181,33 +447,67 @@
                         <option value="price-desc">Harga Termahal</option>
                         <option value="rating-desc">Rating Tertinggi</option>
                     </select>
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"><i class="fas fa-chevron-down text-gray-400 text-xs"></i></span>
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                    </span>
                 </div>
             </div>
         </header>
 
         <div class="p-4">
-            <section class="hero-slider swiper mb-6 rounded-2xl shadow-lg shadow-blue-500/20 animation-hero-glow overflow-hidden">
+            <!-- Enhanced Hero Section -->
+            <section class="hero-slider swiper mb-8 rounded-3xl shadow-2xl overflow-hidden pulse-glow">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide bg-gradient-to-br from-blue-500 to-indigo-600 p-8">
-                        <h2 class="text-3xl font-extrabold text-white mb-2">Solusi Digital Terlengkap</h2>
-                        <p class="text-blue-100 text-sm mb-4 max-w-xs mx-auto">Akun premium dan voucher game dengan harga terbaik, proses instan, dan garansi penuh.</p>
-                        <a href="#productGrid" class="bg-white/90 text-blue-600 font-bold py-2.5 px-6 rounded-full text-sm hover:bg-white transition-all transform hover:scale-105">Mulai Belanja</a>
+                    <div class="swiper-slide hero-gradient p-8 relative">
+                        <div class="relative z-10 text-center">
+                            <div class="floating-animation">
+                                <h2 class="text-3xl font-extrabold text-white mb-3">Solusi Digital Terlengkap</h2>
+                                <p class="text-blue-100 text-sm mb-6 max-w-xs mx-auto leading-relaxed">Akun premium dan voucher game dengan harga terbaik, proses instan, dan garansi penuh.</p>
+                            </div>
+                            <a href="#productGrid" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-sm inline-flex items-center gap-2 shadow-lg">
+                                <i class="fas fa-shopping-bag"></i>
+                                Mulai Belanja
+                            </a>
+                        </div>
                     </div>
-                    <div class="swiper-slide bg-gradient-to-br from-green-500 to-teal-600 p-8">
-                        <h2 class="text-3xl font-extrabold text-white mb-2">Promo YouTube & ChatGPT!</h2>
-                        <p class="text-teal-100 text-sm mb-4 max-w-xs mx-auto">Nikmati hiburan tanpa batas dan produktivitas maksimal dengan harga spesial. Terbatas!</p>
-                        <a href="#dealsSection" class="bg-white/90 text-green-600 font-bold py-2.5 px-6 rounded-full text-sm hover:bg-white transition-all transform hover:scale-105">Lihat Penawaran</a>
+                    <div class="swiper-slide bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600 p-8 relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-green-400/20 via-emerald-400/20 to-teal-400/20"></div>
+                        <div class="relative z-10 text-center">
+                            <div class="floating-animation">
+                                <h2 class="text-3xl font-extrabold text-white mb-3">Promo YouTube & ChatGPT!</h2>
+                                <p class="text-teal-100 text-sm mb-6 max-w-xs mx-auto leading-relaxed">Nikmati hiburan tanpa batas dan produktivitas maksimal dengan harga spesial. Terbatas!</p>
+                            </div>
+                            <a href="#dealsSection" class="btn-primary bg-gradient-to-r from-white/90 to-white/80 text-green-600 font-bold py-3 px-8 rounded-full text-sm inline-flex items-center gap-2 shadow-lg">
+                                <i class="fas fa-tags"></i>
+                                Lihat Penawaran
+                            </a>
+                        </div>
                     </div>
-                    <div class="swiper-slide bg-gradient-to-br from-red-500 to-orange-500 p-8">
-                        <h2 class="text-3xl font-extrabold text-white mb-2">Promo Spesial Gamers!</h2>
-                        <p class="text-orange-100 text-sm mb-4 max-w-xs mx-auto">Top up Diamond ML, FF, dan Valorant Points. Cepat, aman, dan paling murah se-Indonesia!</p>
-                        <a href="#productGrid" class="category-direct-link bg-white/90 text-red-600 font-bold py-2.5 px-6 rounded-full text-sm hover:bg-white transition-all transform hover:scale-105" data-category="game">Lihat Produk Game</a>
+                    <div class="swiper-slide bg-gradient-to-br from-red-500 via-pink-500 to-orange-500 p-8 relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-400/20 via-pink-400/20 to-orange-400/20"></div>
+                        <div class="relative z-10 text-center">
+                            <div class="floating-animation">
+                                <h2 class="text-3xl font-extrabold text-white mb-3">Promo Spesial Gamers!</h2>
+                                <p class="text-orange-100 text-sm mb-6 max-w-xs mx-auto leading-relaxed">Top up Diamond ML, FF, dan Valorant Points. Cepat, aman, dan paling murah se-Indonesia!</p>
+                            </div>
+                            <a href="#productGrid" class="category-direct-link btn-primary bg-gradient-to-r from-white/90 to-white/80 text-red-600 font-bold py-3 px-8 rounded-full text-sm inline-flex items-center gap-2 shadow-lg" data-category="game">
+                                <i class="fas fa-gamepad"></i>
+                                Lihat Produk Game
+                            </a>
+                        </div>
                     </div>
-                     <div class="swiper-slide bg-gradient-to-br from-purple-600 to-indigo-700 p-8">
-                        <h2 class="text-3xl font-extrabold text-white mb-2">Nonton & Musik Tanpa Batas</h2>
-                        <p class="text-purple-100 text-sm mb-4 max-w-xs mx-auto">Langganan Netflix, Spotify, dan Youtube Premium jadi lebih hemat. Anti iklan, anti ribet.</p>
-                        <a href="#productGrid" class="category-direct-link bg-white/90 text-purple-700 font-bold py-2.5 px-6 rounded-full text-sm hover:bg-white transition-all transform hover:scale-105" data-category="app">Cek Langganan App</a>
+                    <div class="swiper-slide bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 p-8 relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 via-indigo-400/20 to-blue-400/20"></div>
+                        <div class="relative z-10 text-center">
+                            <div class="floating-animation">
+                                <h2 class="text-3xl font-extrabold text-white mb-3">Nonton & Musik Tanpa Batas</h2>
+                                <p class="text-purple-100 text-sm mb-6 max-w-xs mx-auto leading-relaxed">Langganan Netflix, Spotify, dan Youtube Premium jadi lebih hemat. Anti iklan, anti ribet.</p>
+                            </div>
+                            <a href="#productGrid" class="category-direct-link btn-primary bg-gradient-to-r from-white/90 to-white/80 text-purple-700 font-bold py-3 px-8 rounded-full text-sm inline-flex items-center gap-2 shadow-lg" data-category="app">
+                                <i class="fas fa-play-circle"></i>
+                                Cek Langganan App
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="swiper-button-prev"></div>
@@ -215,107 +515,147 @@
                 <div class="swiper-pagination"></div>
             </section>
             
-            <div class="mb-5">
-                <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">Kategori Produk</h2>
-                <div id="categoryTabs" class="category-tabs flex items-center gap-2 overflow-x-auto pb-2"></div>
+            <!-- Enhanced Category Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-th-large text-white text-sm"></i>
+                    </div>
+                    Kategori Produk
+                </h2>
+                <div id="categoryTabs" class="category-tabs flex items-center gap-3 overflow-x-auto pb-3"></div>
             </div>
 
-            <section id="dealsSection" class="mb-6 hidden">
-                 <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center"><i class="fas fa-tags text-red-500 mr-2"></i>Penawaran Spesial</h2>
-                 <div id="dealsGrid" class="grid grid-cols-1 gap-4"></div>
+            <!-- Enhanced Special Deals Section -->
+            <section id="dealsSection" class="mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-fire text-white text-sm"></i>
+                    </div>
+                    Penawaran Spesial
+                </h2>
+                <div id="dealsGrid" class="grid grid-cols-1 gap-4"></div>
             </section>
 
-            <main id="productGrid" class="grid grid-cols-2 gap-4 sm:gap-5"></main>
+            <!-- Enhanced Product Grid -->
+            <main id="productGrid" class="grid grid-cols-2 gap-4 sm:gap-6"></main>
 
-            <div id="skeleton-loader" class="grid grid-cols-2 gap-4 sm:gap-5">
-                <div class="skeleton h-60"></div> <div class="skeleton h-60"></div>
-                <div class="skeleton h-60"></div> <div class="skeleton h-60"></div>
+            <!-- Enhanced Loading State -->
+            <div id="skeleton-loader" class="grid grid-cols-2 gap-4 sm:gap-6">
+                <div class="skeleton h-64 rounded-2xl"></div>
+                <div class="skeleton h-64 rounded-2xl"></div>
+                <div class="skeleton h-64 rounded-2xl"></div>
+                <div class="skeleton h-64 rounded-2xl"></div>
             </div>
             
-            <div id="no-results" class="text-center py-10 hidden">
-                <figure class="w-40 mx-auto mb-4 text-gray-300 dark:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14z"></path></svg>
-                </figure>
-                <h3 class="font-bold text-lg text-gray-800 dark:text-gray-200">Oops! Produk tidak ditemukan</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Coba gunakan kata kunci lain atau filter kategori.</p>
+            <!-- Enhanced Empty State -->
+            <div id="no-results" class="empty-state text-center py-16 rounded-3xl hidden">
+                <div class="floating-animation">
+                    <figure class="w-48 mx-auto mb-6 text-gray-300 dark:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14z"/>
+                        </svg>
+                    </figure>
+                    <h3 class="font-bold text-2xl text-gray-800 dark:text-gray-200 mb-2">Oops! Produk tidak ditemukan</h3>
+                    <p class="text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">Coba gunakan kata kunci lain atau filter kategori yang berbeda.</p>
+                </div>
             </div>
             
-             <section class="mt-16 bg-white dark:bg-gray-800/50 p-6 rounded-2xl border border-gray-200 dark:border-gray-700/50">
-                <h2 class="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Kenapa Pilih Kami?</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-                    <div class="flex flex-col items-center p-2 rounded-lg transition-transform duration-300 hover:scale-105">
-                        <div class="w-14 h-14 mb-3 flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/50 dark:to-blue-900/80 text-blue-500 dark:text-blue-300 rounded-full text-2xl"><i class="fas fa-bolt"></i></div>
-                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">Proses Instan</h4>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Aktivasi cepat dalam hitungan menit.</p>
+            <!-- Enhanced Features Section -->
+            <section class="mt-20 glass-effect p-8 rounded-3xl shadow-2xl">
+                <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Kenapa Pilih Kami?</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+                    <div class="group">
+                        <div class="w-16 h-16 mb-4 mx-auto flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl text-2xl shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-gray-800 dark:text-gray-200 mb-2">Proses Instan</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Aktivasi cepat dalam hitungan menit tanpa ribet.</p>
                     </div>
-                    <div class="flex flex-col items-center p-2 rounded-lg transition-transform duration-300 hover:scale-105">
-                        <div class="w-14 h-14 mb-3 flex items-center justify-center bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/50 dark:to-green-900/80 text-green-500 dark:text-green-300 rounded-full text-2xl"><i class="fas fa-shield-alt"></i></div>
-                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">Garansi Penuh</h4>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Jaminan keamanan & durasi sesuai pesanan.</p>
+                    <div class="group">
+                        <div class="w-16 h-16 mb-4 mx-auto flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl text-2xl shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-gray-800 dark:text-gray-200 mb-2">Garansi Penuh</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Jaminan keamanan & durasi sesuai pesanan Anda.</p>
                     </div>
-                    <div class="flex flex-col items-center p-2 rounded-lg transition-transform duration-300 hover:scale-105">
-                        <div class="w-14 h-14 mb-3 flex items-center justify-center bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900/50 dark:to-yellow-900/80 text-yellow-500 dark:text-yellow-300 rounded-full text-2xl"><i class="fas fa-headset"></i></div>
-                        <h4 class="font-semibold text-gray-800 dark:text-gray-200">Bantuan Sigap</h4>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Admin ramah siap membantu kapan saja.</p>
+                    <div class="group">
+                        <div class="w-16 h-16 mb-4 mx-auto flex items-center justify-center bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-2xl text-2xl shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-gray-800 dark:text-gray-200 mb-2">Bantuan Sigap</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Admin ramah siap membantu 24/7 kapan saja.</p>
                     </div>
                 </div>
             </section>
             
-            <section id="testimonialSection" class="mt-16">
-                <h2 class="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Apa Kata Mereka?</h2>
-                <div id="testimonialContainer" class="space-y-4">
-                     </div>
+            <!-- Enhanced Testimonials Section -->
+            <section id="testimonialSection" class="mt-20">
+                <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Apa Kata Mereka?</h2>
+                <div id="testimonialContainer" class="space-y-6"></div>
             </section>
 
-            <section class="mt-16">
-                 <h2 class="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">Tanya Jawab (FAQ)</h2>
-                 <div class="space-y-3">
-                    <details class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700/50 group transition-all duration-300">
-                        <summary class="flex justify-between items-center font-semibold cursor-pointer text-gray-800 dark:text-gray-200">
+            <!-- Enhanced FAQ Section -->
+            <section class="mt-20">
+                <h2 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Tanya Jawab (FAQ)</h2>
+                <div class="space-y-4">
+                    <details class="glass-effect p-6 rounded-2xl shadow-lg group transition-all duration-300 hover:shadow-xl">
+                        <summary class="flex justify-between items-center font-bold cursor-pointer text-gray-800 dark:text-gray-200 text-lg">
                             Bagaimana cara memesan?
-                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500"></i>
+                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500 transition-all duration-300"></i>
                         </summary>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
                             Pilih produk, klik tombol <span class="font-bold text-blue-600 text-lg">+</span>, lalu pilih "Ke Keranjang" jika ingin membeli beberapa item, atau "Order Langsung" untuk proses cepat via WhatsApp. Pesanan akan diarahkan ke admin kami untuk proses pembayaran dan aktivasi.
                         </p>
                     </details>
-                    <details class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700/50 group transition-all duration-300">
-                        <summary class="flex justify-between items-center font-semibold cursor-pointer text-gray-800 dark:text-gray-200">
+                    <details class="glass-effect p-6 rounded-2xl shadow-lg group transition-all duration-300 hover:shadow-xl">
+                        <summary class="flex justify-between items-center font-bold cursor-pointer text-gray-800 dark:text-gray-200 text-lg">
                             Apakah akun ini legal dan aman?
-                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500"></i>
+                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500 transition-all duration-300"></i>
                         </summary>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
                             Tentu saja! Semua akun dan produk yang kami jual adalah 100% legal dan didapatkan melalui cara yang sah. Kami memberikan garansi penuh sesuai durasi yang Anda pilih.
                         </p>
                     </details>
-                    <details class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700/50 group transition-all duration-300">
-                        <summary class="flex justify-between items-center font-semibold cursor-pointer text-gray-800 dark:text-gray-200">
+                    <details class="glass-effect p-6 rounded-2xl shadow-lg group transition-all duration-300 hover:shadow-xl">
+                        <summary class="flex justify-between items-center font-bold cursor-pointer text-gray-800 dark:text-gray-200 text-lg">
                             Metode pembayaran apa saja yang diterima?
-                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500"></i>
+                            <i class="fas fa-chevron-down faq-arrow text-gray-500 group-open:text-blue-500 transition-all duration-300"></i>
                         </summary>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-400 mt-4 leading-relaxed">
                             Kami menerima pembayaran melalui transfer Bank (BCA, Mandiri, BRI) dan E-Wallet (Dana, OVO, GoPay, ShopeePay). Detail akan diinformasikan oleh admin saat proses checkout di WhatsApp.
                         </p>
                     </details>
-                 </div>
+                </div>
             </section>
         </div>
     </div>
 
-    <div id="addToCartModal" role="dialog" aria-modal="true" class="modal fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-40 p-4">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm p-6 flex flex-col space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto"></div>
+    <!-- Enhanced Add to Cart Modal -->
+    <div id="addToCartModal" role="dialog" aria-modal="true" class="modal fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-40 p-4">
+        <div class="modal-content rounded-3xl w-full max-w-sm p-6 flex flex-col space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto"></div>
     </div>
 
-    <div id="cartModal" role="dialog" aria-modal="true" class="modal fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="modal-content bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm p-5 flex flex-col h-[90vh] max-h-[700px] shadow-2xl"></div>
+    <!-- Enhanced Cart Modal -->
+    <div id="cartModal" role="dialog" aria-modal="true" class="modal fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="modal-content rounded-3xl w-full max-w-sm p-6 flex flex-col h-[90vh] max-h-[700px] shadow-2xl"></div>
     </div>
 
-    <footer class="fixed bottom-0 left-0 right-0 max-w-screen-sm mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 p-3 z-10">
-         <div class="flex justify-center items-center gap-4 mb-2 text-gray-500 dark:text-gray-400">
-            <a href="#" class="hover:text-blue-500" aria-label="Instagram"><i class="fab fa-instagram fa-lg"></i></a>
-            <a href="#" class="hover:text-blue-500" aria-label="Facebook"><i class="fab fa-facebook fa-lg"></i></a>
-            <a href="https://wa.me/6289603659756" class="hover:text-green-500" aria-label="WhatsApp"><i class="fab fa-whatsapp fa-lg"></i></a>
-            <a href="#" class="hover:text-blue-500" aria-label="Telegram"><i class="fab fa-telegram fa-lg"></i></a>
+    <!-- Enhanced Footer -->
+    <footer class="fixed bottom-0 left-0 right-0 max-w-screen-sm mx-auto glass-effect border-t border-white/20 dark:border-gray-700/30 p-4 z-10">
+        <div class="flex justify-center items-center gap-6 mb-3 text-gray-500 dark:text-gray-400">
+            <a href="#" class="hover:text-pink-500 transition-colors duration-300 transform hover:scale-110" aria-label="Instagram">
+                <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="#" class="hover:text-blue-500 transition-colors duration-300 transform hover:scale-110" aria-label="Facebook">
+                <i class="fab fa-facebook fa-lg"></i>
+            </a>
+            <a href="https://wa.me/6289603659756" class="hover:text-green-500 transition-colors duration-300 transform hover:scale-110" aria-label="WhatsApp">
+                <i class="fab fa-whatsapp fa-lg"></i>
+            </a>
+            <a href="#" class="hover:text-blue-400 transition-colors duration-300 transform hover:scale-110" aria-label="Telegram">
+                <i class="fab fa-telegram fa-lg"></i>
+            </a>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400 text-center">© 2025 Dmaz Alyxers. Dibuat dengan ❤️ oleh Admin.</p>
     </footer>
@@ -505,6 +845,7 @@
                 this.DOMElements.skeletonLoader.style.display = 'grid';
                 setTimeout(() => {
                     this.ui.renderAll();
+                    this.ui.addProductImageShimmers();
                 }, 600);
             },
             
@@ -556,36 +897,47 @@
 
                     productsToRender.forEach((p, index) => { 
                         const card = document.createElement('div');
-                        card.className = 'product-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg shadow-gray-500/5 dark:shadow-black/10 flex flex-col border border-gray-200/50 dark:border-gray-700/50';
+                        card.className = 'product-card rounded-3xl shadow-xl flex flex-col relative overflow-hidden group';
                         card.dataset.id = p.id; 
-                        card.style.animationDelay = `${index * 50}ms`;
+                        card.style.animationDelay = `${index * 75}ms`;
                         
                         let badgeHtml = '';
                         if(p.deal) badgeHtml = `<div class="product-badge deal">${p.deal.label}</div>`;
                         else if(p.isBestSeller) badgeHtml = '<div class="product-badge best-seller">Best Seller</div>';
                         else if (p.isNew) badgeHtml = '<div class="product-badge">New</div>';
 
+                        // Enhanced product card with better visual hierarchy
                         card.innerHTML = `
                             ${badgeHtml}
-                            <div class="relative">
-                                <img src="${App.helpers.getImageUrl(p)}" alt="${p.title}" class="rounded-t-2xl w-full h-32 object-cover">
+                            <div class="relative product-image overflow-hidden">
+                                <img src="${App.helpers.getImageUrl(p)}" alt="${p.title}" class="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
-                            <div class="p-4 flex flex-col items-start flex-grow">
-                                <h3 class="font-bold text-base text-gray-800 dark:text-gray-100 h-10">${p.title}</h3>
-                                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    <i class="fas fa-star text-yellow-400 mr-1"></i><span class="font-medium">${p.rating}</span>
-                                    <span class="mx-1.5">&middot;</span>
-                                    <i class="fas fa-box-open mr-1 text-green-500"></i><span>Stok: ${p.stock}</span>
-                                 </div>
-                            </div>
-                            <div class="p-4 pt-2 mt-auto flex items-center justify-between z-10">
-                                <div>
-                                    <div class="text-xs text-gray-500 dark:text-gray-400">Mulai</div>
-                                    <div class="text-lg font-bold text-blue-600 dark:text-blue-400">${App.helpers.formatPrice(p.variants[0].price)}</div>
+                            <div class="p-5 flex flex-col flex-grow relative z-10">
+                                <div class="mb-3">
+                                    <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100 mb-2 leading-tight line-clamp-2">${p.title}</h3>
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div class="flex items-center text-amber-500">
+                                            <i class="fas fa-star mr-1"></i>
+                                            <span class="font-semibold">${p.rating}</span>
+                                        </div>
+                                        <div class="flex items-center text-emerald-500">
+                                            <i class="fas fa-check-circle mr-1"></i>
+                                            <span class="font-medium">Stok: ${p.stock}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button aria-label="Tambah ke keranjang ${p.title}" class="add-to-cart-btn bg-gradient-to-br from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg w-12 h-10 text-base font-semibold flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95">
-                                    <i class="fas fa-plus"></i>
-                                </button>
+                                <div class="mt-auto">
+                                    <div class="flex items-end justify-between">
+                                        <div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Mulai dari</p>
+                                            <p class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">${App.helpers.formatPrice(p.variants[0].price)}</p>
+                                        </div>
+                                        <button aria-label="Tambah ke keranjang ${p.title}" class="add-to-cart-btn btn-primary text-white rounded-2xl w-14 h-12 text-lg font-semibold flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>`;
                         productGrid.appendChild(card);
                     });
@@ -602,29 +954,38 @@
                     dealsSection.style.display = 'block';
                     dealsGrid.innerHTML = '';
 
-                    dealProducts.forEach(p => {
+                    dealProducts.forEach((p, index) => {
                         const dealCard = document.createElement('div');
-                        dealCard.className = 'product-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex items-center gap-4 p-4 border border-emerald-500/30 dark:border-emerald-500/50';
+                        dealCard.className = 'product-card glass-effect rounded-3xl shadow-xl flex items-center gap-5 p-6 border border-emerald-500/30 dark:border-emerald-500/50 relative overflow-hidden group';
                         dealCard.dataset.id = p.id;
+                        dealCard.style.animationDelay = `${index * 100}ms`;
 
                         dealCard.innerHTML = `
-                            <img src="${App.helpers.getImageUrl(p)}" alt="${p.title}" class="w-24 h-24 rounded-lg object-cover">
+                            <div class="absolute top-0 right-0 bg-gradient-to-l from-emerald-500 to-green-500 text-white px-3 py-1 rounded-bl-2xl text-xs font-bold shadow-lg">
+                                <i class="fas fa-fire mr-1"></i>HOT DEAL
+                            </div>
+                            <div class="relative product-image">
+                                <img src="${App.helpers.getImageUrl(p)}" alt="${p.title}" class="w-20 h-20 rounded-2xl object-cover shadow-lg transition-transform duration-300 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent rounded-2xl"></div>
+                            </div>
                             <div class="flex-grow">
-                                <div class="flex justify-between items-start">
+                                <div class="flex justify-between items-start mb-3">
                                     <div>
-                                        <h4 class="font-bold text-gray-800 dark:text-white">${p.title}</h4>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">${p.deal.label}</p>
+                                        <h4 class="font-bold text-lg text-gray-800 dark:text-white leading-tight">${p.title}</h4>
+                                        <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded-full inline-block mt-1">${p.deal.label}</p>
                                     </div>
-                                    <button aria-label="Tambah ke keranjang ${p.title}" class="add-to-cart-btn text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg w-9 h-9 flex-shrink-0 flex items-center justify-center transition-all transform hover:scale-110 active:scale-95">
-                                        <i class="fas fa-plus"></i>
+                                    <button aria-label="Tambah ke keranjang ${p.title}" class="add-to-cart-btn bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-2xl w-12 h-12 flex-shrink-0 flex items-center justify-center transition-all transform hover:scale-110 active:scale-95 shadow-lg">
+                                        <i class="fas fa-plus text-lg"></i>
                                     </button>
                                 </div>
-                                <div class="mt-2 text-right">
-                                    <span class="text-sm line-through text-gray-400 dark:text-gray-500">${App.helpers.formatPrice(p.deal.originalPrice)}</span>
-                                    <p class="text-xl font-bold text-emerald-600 dark:text-emerald-400">${App.helpers.formatPrice(p.variants[0].price)}</p>
-                                </div>
-                                <div class="deal-countdown-timer mt-2 text-xs text-gray-500 dark:text-gray-400 flex justify-end items-center gap-2" data-end-date="${p.deal.endDate}">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-right">
+                                        <span class="text-sm line-through text-gray-400 dark:text-gray-500 block">${App.helpers.formatPrice(p.deal.originalPrice)}</span>
+                                        <p class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">${App.helpers.formatPrice(p.variants[0].price)}</p>
                                     </div>
+                                    <div class="deal-countdown-timer text-xs text-gray-600 dark:text-gray-400 text-center bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-xl" data-end-date="${p.deal.endDate}">
+                                    </div>
+                                </div>
                             </div>
                         `;
                         dealsGrid.appendChild(dealCard);
@@ -671,8 +1032,19 @@
                     categories.forEach(category => {
                         const button = document.createElement('button');
                         const isActive = App.state.filter.category === category;
-                        button.className = `category-tab-btn capitalize text-sm font-medium px-4 py-2 rounded-full transition-colors duration-300 whitespace-nowrap ${isActive ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-200/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700'}`;
-                        button.textContent = category;
+                        button.className = `category-tab-btn capitalize text-sm font-semibold px-6 py-3 rounded-2xl transition-all duration-300 whitespace-nowrap ${isActive ? 'active' : 'glass-effect text-gray-700 dark:text-gray-200 hover:bg-white/30 dark:hover:bg-gray-700/50'}`;
+                        
+                        // Add icons for different categories
+                        const iconMap = {
+                            'Semua': 'fas fa-th-large',
+                            'app': 'fas fa-mobile-alt',
+                            'game': 'fas fa-gamepad',
+                            'streaming': 'fas fa-play-circle',
+                            'utility': 'fas fa-tools'
+                        };
+                        
+                        const icon = iconMap[category] || 'fas fa-tag';
+                        button.innerHTML = `<i class="${icon} mr-2"></i>${category}`;
                         button.dataset.category = category;
                         App.DOMElements.categoryTabs.appendChild(button);
                     });
@@ -686,16 +1058,25 @@
                         .sort(() => 0.5 - Math.random()) // Shuffle
                         .slice(0, 3); // Take 3 random ones
 
-                    container.innerHTML = allTestimonials.map(t => `
-                        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700/50">
-                            <div class="flex items-center mb-3">
-                                <div class="w-10 h-10 rounded-full mr-4 bg-gray-200 dark:bg-gray-700 flex items-center justify-center font-bold text-blue-500">${t.name.charAt(0)}</div>
+                    container.innerHTML = allTestimonials.map((t, index) => `
+                        <div class="testimonial-card p-6 rounded-3xl shadow-xl border transition-transform duration-300 hover:scale-[1.02]" style="animation-delay: ${index * 150}ms">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-2xl mr-4 bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center font-bold text-white text-lg shadow-lg">${t.name.charAt(0)}</div>
                                 <div>
-                                    <p class="font-semibold text-gray-800 dark:text-gray-200">${t.name}</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Review untuk ${t.product}</p>
+                                    <p class="font-bold text-gray-800 dark:text-gray-200 text-lg">${t.name}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Review untuk ${t.product}</p>
+                                    <div class="flex items-center mt-1">
+                                        ${Array(5).fill().map((_, i) => 
+                                            `<i class="fas fa-star text-amber-400 text-xs mr-1"></i>`
+                                        ).join('')}
+                                    </div>
                                 </div>
                             </div>
-                            <blockquote class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic">"${t.text}"</blockquote>
+                            <blockquote class="text-gray-600 dark:text-gray-300 leading-relaxed italic relative">
+                                <i class="fas fa-quote-left text-blue-400 text-2xl absolute -top-2 -left-2 opacity-50"></i>
+                                <span class="relative z-10">${t.text}</span>
+                                <i class="fas fa-quote-right text-blue-400 text-2xl absolute -bottom-2 -right-2 opacity-50"></i>
+                            </blockquote>
                         </div>
                     `).join('');
                 },
@@ -886,14 +1267,35 @@
                 updateCartBadge() {
                     const totalItems = App.state.cart.reduce((sum, item) => sum + item.quantity, 0);
                     App.DOMElements.cartBadge.textContent = totalItems;
-                    App.DOMElements.cartBadge.classList.toggle('scale-0', totalItems === 0);
+                    
+                    if (totalItems === 0) {
+                        App.DOMElements.cartBadge.classList.add('scale-0');
+                    } else {
+                        App.DOMElements.cartBadge.classList.remove('scale-0');
+                        // Add bounce animation
+                        App.DOMElements.cartBadge.classList.add('badge-bounce');
+                        setTimeout(() => {
+                            App.DOMElements.cartBadge.classList.remove('badge-bounce');
+                        }, 300);
+                    }
                 },
-                showToast(message, icon = 'fa-check-circle', color = 'bg-green-500') {
+                showToast(message, icon = 'fa-check-circle', bgClass = 'bg-gradient-to-r from-emerald-500 to-green-500') {
                     const toast = document.createElement('div');
-                    toast.className = `toast-notification ${color} text-white text-sm font-semibold p-3 rounded-xl shadow-lg flex items-center gap-3`;
-                    toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+                    toast.className = `toast-notification toast-slide ${bgClass} text-white text-sm font-bold p-4 rounded-2xl shadow-2xl flex items-center gap-3 glass-effect border border-white/20`;
+                    toast.innerHTML = `
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <span>${message}</span>
+                    `;
                     App.DOMElements.toastContainer.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3500);
+                    
+                    // Auto remove with fade out animation
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateY(100%) scale(0.8)';
+                        setTimeout(() => toast.remove(), 300);
+                    }, 3500);
                 },
                 openModal(modal) {
                     modal.classList.add('active');
@@ -935,6 +1337,19 @@
                         autoplay: { delay: 5000, disableOnInteraction: false, },
                         pagination: { el: '.swiper-pagination', clickable: true, },
                         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev', },
+                        effect: 'fade',
+                        fadeEffect: { crossFade: true },
+                    });
+                },
+                addProductImageShimmers() {
+                    // Add subtle shimmer effect to product images on load
+                    document.querySelectorAll('.product-image img').forEach(img => {
+                        img.addEventListener('load', () => {
+                            img.parentElement.classList.add('shimmer');
+                            setTimeout(() => {
+                                img.parentElement.classList.remove('shimmer');
+                            }, 1000);
+                        });
                     });
                 }
             },
@@ -962,22 +1377,22 @@
                     const removedItem = App.state.cart.splice(index, 1);
                     this.save();
                     App.ui.renderCartView();
-                    App.ui.showToast(`"${removedItem[0].name}" dihapus.`, 'fa-trash-alt', 'bg-red-500');
+                                            App.ui.showToast(`"${removedItem[0].name}" dihapus.`, 'fa-trash-alt', 'bg-gradient-to-r from-red-500 to-pink-500');
                 },
                 clear() {
                     App.state.cart = [];
                     App.state.discount = { code: null, rate: 0 };
                     this.save();
                     App.ui.renderCartView();
-                    App.ui.showToast('Keranjang telah dikosongkan.', 'fa-trash', 'bg-blue-500');
+                                            App.ui.showToast('Keranjang telah dikosongkan.', 'fa-trash', 'bg-gradient-to-r from-blue-500 to-indigo-500');
                 },
                 applyCoupon(code) {
                      if (code.toUpperCase() === 'DMAZALYXERS10') {
                         App.state.discount = { code: code.toUpperCase(), rate: 0.10 };
-                        App.ui.showToast('Kupon berhasil diterapkan!', 'fa-tags', 'bg-green-500');
+                        App.ui.showToast('Kupon berhasil diterapkan!', 'fa-tags', 'bg-gradient-to-r from-emerald-500 to-green-500');
                     } else {
                         App.state.discount = { code: null, rate: 0 };
-                        App.ui.showToast('Kupon tidak valid.', 'fa-exclamation-circle', 'bg-red-500');
+                        App.ui.showToast('Kupon tidak valid.', 'fa-exclamation-circle', 'bg-gradient-to-r from-red-500 to-pink-500');
                     }
                     App.ui.renderCartView();
                 },
@@ -994,12 +1409,12 @@
                         modal.dataset.price = newPrice;
                         modal.dataset.couponApplied = code;
                         priceDisplay.innerHTML = `<span class="line-through text-gray-500 text-base mr-2">${App.helpers.formatPrice(originalPrice * qty)}</span> ${App.helpers.formatPrice(newPrice * qty)}`;
-                        App.ui.showToast('Kupon YouTube Rp1rb berhasil!', 'fa-tags', 'bg-green-500');
+                        App.ui.showToast('Kupon YouTube Rp1rb berhasil!', 'fa-tags', 'bg-gradient-to-r from-emerald-500 to-green-500');
                     } else {
                         modal.dataset.price = originalPrice;
                         modal.dataset.couponApplied = 'false';
                         priceDisplay.innerHTML = App.helpers.formatPrice(originalPrice * qty);
-                        App.ui.showToast('Kupon tidak valid untuk item ini.', 'fa-exclamation-circle', 'bg-red-500');
+                        App.ui.showToast('Kupon tidak valid untuk item ini.', 'fa-exclamation-circle', 'bg-gradient-to-r from-red-500 to-pink-500');
                     }
                 },
                 save() {
